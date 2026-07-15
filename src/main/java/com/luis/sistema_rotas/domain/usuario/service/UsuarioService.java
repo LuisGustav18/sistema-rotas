@@ -1,0 +1,65 @@
+package com.luis.sistema_rotas.domain.usuario.service;
+
+import com.luis.sistema_rotas.domain.usuario.dto.UsuarioDTO;
+import com.luis.sistema_rotas.domain.usuario.entity.Usuario;
+import com.luis.sistema_rotas.domain.usuario.repository.UsuarioRepository;
+import com.luis.sistema_rotas.exceptions.DataIntegrityViolationException;
+import com.luis.sistema_rotas.exceptions.ObjectNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+public class UsuarioService {
+
+    @Autowired
+    private UsuarioRepository repository;
+
+    @Autowired
+    private PasswordEncoder encoder;
+
+    public Usuario findById(UUID id){
+        Optional<Usuario> obj = repository.findById(id);
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado"));
+    }
+
+    public Usuario create(UsuarioDTO objDTO){
+        Usuario obj = transferDataOfDTO(objDTO);
+        emailValidator(obj.getEmail());
+        obj.setSenha(encoder.encode(obj.getSenha()));
+        return repository.save(obj);
+    }
+
+    public Usuario update(UUID id, UsuarioDTO objDTO){
+        Usuario obj = findById(id);
+        obj = transferDataOfDTO(objDTO);
+        emailValidator(obj.getEmail());
+        return repository.save(obj);
+    }
+
+    public void delete(UUID id){
+        Usuario obj = findById(id);
+        repository.delete(obj);
+    }
+
+    private void emailValidator(String email){
+        if (!email.contains("@")
+                || email.indexOf("@") != email.lastIndexOf("@")
+                || email.endsWith(".com")
+                || !email.substring(0 ,email.indexOf("@")).trim().isEmpty()
+                || !email.substring(email.indexOf("@")).trim().isEmpty()){
+            throw new DataIntegrityViolationException("Email inválido");
+
+        }
+    }
+
+    public Usuario transferDataOfDTO(UsuarioDTO objDTO){
+        Usuario obj = new Usuario();
+        obj.setEmail(objDTO.email());
+        obj.setSenha(objDTO.senha());
+        return obj;
+    }
+}
