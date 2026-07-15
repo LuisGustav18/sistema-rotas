@@ -1,0 +1,27 @@
+package com.luis.sistema_rotas.infra.minio;
+
+import io.minio.MinioClient;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class MinioConfig {
+
+    @Value("minio.url")
+    private String url;
+
+    @Value("minio.access-key")
+    private String accesskey;
+
+    @Value("minio.secret-key")
+    private String secretKey;
+
+    @Bean
+    public MinioClient minioClient(){
+        return minioClient().builder()
+                .endpoint(url)
+                .credentials(accesskey, secretKey)
+                .build();
+    }
+}
