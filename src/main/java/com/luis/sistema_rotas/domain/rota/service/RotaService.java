@@ -68,7 +68,7 @@ public class RotaService {
     }
 
     public Rota transferDataOfDTO(RotaDTO objDTO){
-        Projeto projeto = projetoService.findById(objDTO.projeto());
+         Projeto projeto = projetoService.findById(objDTO.projeto());
 
         Rota obj = new Rota();
 

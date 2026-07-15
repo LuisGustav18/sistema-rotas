@@ -1,7 +1,6 @@
 package com.luis.sistema_rotas.domain.rota.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.luis.sistema_rotas.domain.projeto.enity.Projeto;
 import com.luis.sistema_rotas.domain.projeto.entity.Projeto;
 import jakarta.persistence.*;
 import lombok.*;
