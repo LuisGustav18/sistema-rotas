@@ -1,5 +1,6 @@
 package com.luis.sistema_rotas.exceptions.handler;
 
+import com.luis.sistema_rotas.exceptions.DataIntegrityViolationException;
 import com.luis.sistema_rotas.exceptions.ObjectNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,18 @@ public class ResourceExceptionHandler {
                 System.currentTimeMillis(),
                 HttpStatus.NOT_FOUND.value(),
                 "Object Not Found",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<StandardError> dataIntegrityViolationException(DataIntegrityViolationException ex, HttpServletRequest request){
+        StandardError error = new StandardError(
+                System.currentTimeMillis(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Violation Data",
                 ex.getMessage(),
                 request.getRequestURI()
         );

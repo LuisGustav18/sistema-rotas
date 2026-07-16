@@ -28,15 +28,17 @@ public class UsuarioService {
 
     public Usuario create(UsuarioDTO objDTO){
         Usuario obj = transferDataOfDTO(objDTO);
-        emailValidator(obj.getEmail());
+        validationEmail(obj.getEmail());
         obj.setSenha(encoder.encode(obj.getSenha()));
         return repository.save(obj);
     }
 
     public Usuario update(UUID id, UsuarioDTO objDTO){
         Usuario obj = findById(id);
+        if (!objDTO.email().equals(obj.getEmail())){
+            validationEmail(objDTO.email());
+        }
         obj = transferDataOfDTO(objDTO);
-        emailValidator(obj.getEmail());
         return repository.save(obj);
     }
 
@@ -45,21 +47,17 @@ public class UsuarioService {
         repository.delete(obj);
     }
 
-    private void emailValidator(String email){
-        if (!email.contains("@")
-                || email.indexOf("@") != email.lastIndexOf("@")
-                || email.endsWith(".com")
-                || !email.substring(0 ,email.indexOf("@")).trim().isEmpty()
-                || !email.substring(email.indexOf("@")).trim().isEmpty()){
-            throw new DataIntegrityViolationException("Email inválido");
-
-        }
-    }
-
     public Usuario transferDataOfDTO(UsuarioDTO objDTO){
         Usuario obj = new Usuario();
         obj.setEmail(objDTO.email());
         obj.setSenha(objDTO.senha());
         return obj;
+    }
+
+    private void validationEmail(String email){
+        Optional<Usuario> obj = repository.findByEmail(email);
+        if (obj.isPresent()){
+            throw new DataIntegrityViolationException("Email já cadastrado!");
+        }
     }
 }

@@ -1,0 +1,1 @@
+ALTER TABLE imagem RENAME COLUMN data_cricao TO data_criacao

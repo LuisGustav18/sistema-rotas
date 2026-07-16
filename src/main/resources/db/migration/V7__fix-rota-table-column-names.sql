@@ -1,0 +1,1 @@
+ALTER TABLE rota RENAME COLUMN data_cricao TO data_criacao

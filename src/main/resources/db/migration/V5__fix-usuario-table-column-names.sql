@@ -1,0 +1,1 @@
+ALTER TABLE usuario RENAME COLUMN data_cricao TO data_criacao
