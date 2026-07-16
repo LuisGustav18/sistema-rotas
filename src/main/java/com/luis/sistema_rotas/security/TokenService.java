@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Collections;
 
 @Service
 public class TokenService {
@@ -22,7 +23,7 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("sistema-rotas")
                     .withSubject(user.getUsername())
-                    .withClaim("id", user.getId())
+                    .withClaim("id", user.getId().toString())
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
             return token;
