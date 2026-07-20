@@ -1,6 +1,7 @@
 package com.luis.sistema_rotas.domain.projeto.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.luis.sistema_rotas.domain.projeto.dto.ProjetoDTO;
 import com.luis.sistema_rotas.domain.usuario.entity.Usuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,8 +31,14 @@ public class Projeto {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date data;
 
-    @JsonFormat(pattern = "DD/mm/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataCriacao = LocalDate.now();
+
+    public Projeto(ProjetoDTO objDTO) {
+        titulo = objDTO.titulo();
+        data = objDTO.data();
+    }
 }

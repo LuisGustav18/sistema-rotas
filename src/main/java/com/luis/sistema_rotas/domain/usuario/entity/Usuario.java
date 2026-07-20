@@ -1,6 +1,7 @@
 package com.luis.sistema_rotas.domain.usuario.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.luis.sistema_rotas.domain.usuario.dto.UsuarioDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -29,6 +30,11 @@ public class Usuario {
 
     private String senha;
 
-    @JsonFormat(pattern = "DD/mm/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataCriacao = LocalDate.now();
+
+    public Usuario(UsuarioDTO objDTO) {
+        email = objDTO.email();
+        senha = objDTO.senha();
+    }
 }

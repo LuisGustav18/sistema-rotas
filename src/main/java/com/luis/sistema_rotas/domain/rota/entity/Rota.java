@@ -33,8 +33,9 @@ public class Rota {
     @JoinColumn(name = "projeto_id")
     private Projeto projeto;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date data;
 
-    @JsonFormat(pattern = "DD/mm/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataCriacao = LocalDate.now();
 }

@@ -29,6 +29,6 @@ public class Imagem {
     @JoinColumn(name = "rota_id")
     private Rota rota;
 
-    @JsonFormat(pattern = "DD/mm/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataCriacao = LocalDate.now();
 }
