@@ -5,6 +5,7 @@ import com.luis.sistema_rotas.domain.projeto.entity.Projeto;
 import com.luis.sistema_rotas.domain.projeto.repository.ProjetoRepository;
 import com.luis.sistema_rotas.domain.usuario.entity.Usuario;
 import com.luis.sistema_rotas.domain.usuario.service.UsuarioService;
+import com.luis.sistema_rotas.exceptions.DataIntegrityViolationException;
 import com.luis.sistema_rotas.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,13 +39,18 @@ public class ProjetoService {
     }
 
     public Projeto create(ProjetoDTO objDTO){
-        Projeto obj = transferDataOfDTO(objDTO);
+        Projeto obj = new Projeto(objDTO);
+        obj.setUsuario(findUsuario(objDTO.usuario()));
         return repository.save(obj);
     }
 
     public Projeto update(UUID id, ProjetoDTO objDTO){
         Projeto obj = findById(id);
-        obj = transferDataOfDTO(objDTO);
+        if (!obj.getUsuario().getId().equals(objDTO.usuario())){
+            throw new DataIntegrityViolationException("Erro de atualização de projeto");
+        }
+        obj.setTitulo(objDTO.titulo());
+        obj.setData(objDTO.data());
         return repository.save(obj);
     }
 
@@ -53,16 +59,8 @@ public class ProjetoService {
         repository.delete(obj);
     }
 
-    private Projeto transferDataOfDTO(ProjetoDTO objDTO){
-        Projeto obj = new Projeto();
-
-        Usuario usuario = usuarioService.findById(objDTO.usuario());
-
-        obj.setTitulo(objDTO.titulo());
-        obj.setData(objDTO.data());
-        obj.setUsuario(usuario);
-
-        return obj;
+    private Usuario findUsuario(UUID id){
+        return usuarioService.findById(id);
     }
 }
 

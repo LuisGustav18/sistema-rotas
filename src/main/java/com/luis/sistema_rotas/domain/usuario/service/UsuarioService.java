@@ -27,7 +27,7 @@ public class UsuarioService {
     }
 
     public Usuario create(UsuarioDTO objDTO){
-        Usuario obj = transferDataOfDTO(objDTO);
+        Usuario obj = new Usuario(objDTO);
         validationEmail(obj.getEmail());
         obj.setSenha(encoder.encode(obj.getSenha()));
         return repository.save(obj);
@@ -35,23 +35,22 @@ public class UsuarioService {
 
     public Usuario update(UUID id, UsuarioDTO objDTO){
         Usuario obj = findById(id);
+
         if (!objDTO.email().equals(obj.getEmail())){
             validationEmail(objDTO.email());
+            obj.setEmail(objDTO.email());
         }
-        obj = transferDataOfDTO(objDTO);
+
+        if (!objDTO.senha().equals(obj.getSenha())){
+            obj.setSenha(encoder.encode(objDTO.senha()));
+        }
+
         return repository.save(obj);
     }
 
     public void delete(UUID id){
         Usuario obj = findById(id);
         repository.delete(obj);
-    }
-
-    public Usuario transferDataOfDTO(UsuarioDTO objDTO){
-        Usuario obj = new Usuario();
-        obj.setEmail(objDTO.email());
-        obj.setSenha(objDTO.senha());
-        return obj;
     }
 
     private void validationEmail(String email){

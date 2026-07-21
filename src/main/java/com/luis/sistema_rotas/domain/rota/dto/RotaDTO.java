@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public record RotaDTO(
         String titulo,
-        String decricao,
+        String descricao,
         Double longitude,
         Double latitude,
         UUID projeto,

@@ -42,8 +42,8 @@ public class RotaService {
 
         validationDuplicationSameLocation(objDTO.latitude(), objDTO.longitude());
 
-        Rota obj = transferDataOfDTO(objDTO);
-
+        Rota obj = new Rota(objDTO);
+        obj.setProjeto(findProjeto(objDTO.projeto()));
         return repository.save(obj);
     }
 
@@ -52,7 +52,10 @@ public class RotaService {
         if (!obj.getLongitude().equals(objDTO.longitude()) || !obj.getLatitude().equals(objDTO.latitude())) {
             validationDuplicationSameLocation(objDTO.latitude(), objDTO.longitude());
         }
-        obj = transferDataOfDTO(objDTO);
+        if (!obj.getProjeto().getId().equals(objDTO.projeto())){
+            throw new DataIntegrityViolationException("Erro na atualização de rota");
+        }
+        obj = new Rota(objDTO);
         return repository.save(obj);
     }
 
@@ -67,17 +70,8 @@ public class RotaService {
         }
     }
 
-    public Rota transferDataOfDTO(RotaDTO objDTO){
-         Projeto projeto = projetoService.findById(objDTO.projeto());
-
-        Rota obj = new Rota();
-
-        obj.setTitulo(objDTO.titulo());
-        obj.setDescricao(objDTO.decricao());
-        obj.setData(objDTO.data());
-        obj.setLongitude(objDTO.longitude());
-        obj.setLatitude(objDTO.latitude());
-        obj.setProjeto(projeto);
-        return obj;
+    private Projeto findProjeto(UUID id){
+         Projeto projeto = projetoService.findById(id);
+        return projeto;
     }
 }
