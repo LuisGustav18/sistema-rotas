@@ -57,7 +57,7 @@ public class MinioService {
     public void deletar(String url) throws Exception {
         minioClient.removeObject(
                 RemoveObjectArgs.builder()
-                        .bucket("imagems")
+                        .bucket("imagens")
                         .object(url)
                         .build()
         );

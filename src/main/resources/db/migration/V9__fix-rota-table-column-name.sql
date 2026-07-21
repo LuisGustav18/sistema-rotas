@@ -1,0 +1,1 @@
+ALTER TABLE rota RENAME COLUMN decricao TO descricao;
