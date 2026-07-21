@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "imagem")
 @Getter
 @Setter
 @NoArgsConstructor
